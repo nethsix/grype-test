@@ -13,8 +13,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Build an image from Dockerfile
         run: |
-          docker build -t nethsix/trivy-test:${{ github.sha }} .
+          docker build -t nethsix/grype-test:${{ github.sha }} .
       - name: Scan image
         uses: anchore/scan-action@v3
+        id: scan
         with:
-          image: 'nethsix/trivy-test:${{ github.sha }}'
+          image: 'nethsix/grype-test:${{ github.sha }}'
+      - name: Inspect action SARIF report
+        run: cat ${{ steps.scan.outputs.sarif }}
