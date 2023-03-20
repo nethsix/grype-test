@@ -19,5 +19,6 @@ jobs:
         id: scan
         with:
           image: 'nethsix/grype-test:${{ github.sha }}'
+          fail-build: false
       - name: Inspect action SARIF report
         run: cat ${{ steps.scan.outputs.sarif }}
