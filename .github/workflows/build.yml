@@ -1,0 +1,20 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build an image from Dockerfile
+        run: |
+          docker build -t nethsix/trivy-test:${{ github.sha }} .
+      - name: Scan image
+        uses: anchore/scan-action@v3
+        with:
+          image: 'nethsix/trivy-test:${{ github.sha }}'
