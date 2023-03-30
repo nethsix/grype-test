@@ -27,3 +27,21 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: Inspect action SARIF report
         run: cat ${{ steps.scan.outputs.sarif }}
+      - name: Email SARIF report
+        uses: dawidd6/action-send-mail@v3
+        with:
+          #  * smtp+starttls://user:password@server:port
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          server_address: smtp.mailgun.org
+          server_port: 587
+          secure: true
+          subject: 'Scan for nethsix/grype-test:${{ github.sha }}'
+          to: khor.soonhin@packagecloud.io,elizabeth.vo@packagecloud.io
+          from: Packagecloud # <ops@packagecloud.io>
+          body: 'Scan for nethsix/grype-test:${{ github.sha }}'
+          reply_to: ops@packagecloud.io
+          in_reply_to: <ops@packagecloud.io>
+          ignore_cert: true
+          convert_markdown: true
+          attachments: ${{ steps.scan.outputs.sarif }}
+          priority: normal
