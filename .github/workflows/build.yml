@@ -34,7 +34,9 @@ jobs:
           connection_url: ${{secrets.MAIL_CONNECTION}}
           server_address: smtp.mailgun.org
           server_port: 587
-          secure: true
+          # To prevent error 'routines:ssl3_get_record:wrong version number:'
+          # See: https://github.com/dawidd6/action-send-mail/issues/124
+          secure: false
           subject: 'Scan for nethsix/grype-test:${{ github.sha }}'
           to: khor.soonhin@packagecloud.io,elizabeth.vo@packagecloud.io
           from: Packagecloud # <ops@packagecloud.io>
